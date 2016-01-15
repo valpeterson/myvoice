@@ -1,0 +1,76 @@
+<!--
+  Copyright 2013 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ff70ff70"
+    android:id="@+id/myvoice_main_layout" >
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+        <ImageButton
+            android:contentDescription="left button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="Left Button"
+            android:src="@drawable/previous"
+            android:id="@+id/btn_left"
+            android:onClick="onClickLeftButton"
+            android:background="#ff1e7805" />
+
+        <ImageButton
+            android:contentDescription="middle button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="Center Button"
+            android:src="@drawable/select"
+            android:id="@+id/btn_center"
+            android:onClick="onClickCenterButton"
+            android:background="#ff7c12ff" />
+
+        <ImageButton
+            android:contentDescription="right button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text="Right Button"
+            android:id="@+id/btn_right"
+            android:onClick="onClickRightButton"
+            android:background="#ff0c28a0"
+            android:src="@drawable/next" />
+    </LinearLayout>
+    <!-- added focusable and focusableInTouchMode so I can programmatically force accessibility
+     events to make the TalkBack read the content without the user touching the text box.
+      Do not give it a contentDescription, since we want TalkBack to read the text, not the view
+      description.-->
+    <TextView
+        android:id="@+id/selection"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:text="nothing currently selected"
+        android:background="#ff0812ff"
+        android:textColor="#ffffffff"
+        android:textSize="30dp" />
+
+</LinearLayout>
