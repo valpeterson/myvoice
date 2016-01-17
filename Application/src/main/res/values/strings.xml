@@ -17,7 +17,7 @@
 <resources>
     <string name="shortcutname">My Voice</string>
     <string name="sample_action">Toggle Immersive Mode!</string>
-    <string name="title_activity_music_nav">MusicNavActivity</string>
+    <string name="title_activity_music_nav">My Voice - Music Navigation</string>
     <string name="action_settings">Settings</string>
 
 </resources>

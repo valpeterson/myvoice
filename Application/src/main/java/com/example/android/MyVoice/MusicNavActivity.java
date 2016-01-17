@@ -70,6 +70,7 @@ public class MusicNavActivity extends MVActivityBase implements MediaPlayer.OnCo
         btnLeft = (ImageButton) findViewById(R.id.btn_left);
         btnCenter = (ImageButton) findViewById(R.id.btn_center);
         btnRight = (ImageButton) findViewById(R.id.btn_right);
+        txtSelection.setText(topMenuTextList.get(menuSelection));
 
         btnCenter.setOnLongClickListener(new OnLongClickListener() {
             @Override
@@ -107,11 +108,14 @@ public class MusicNavActivity extends MVActivityBase implements MediaPlayer.OnCo
     @Override
     public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
         event.getText().add("Select music navigation method");
+        event.getText().add(topMenuTextList.get(menuSelection));
+
         return true;
     }
 
     private void announceMenuMode() {
         txtSelection.announceForAccessibility("Select music navigation method");
+        txtSelection.announceForAccessibility(topMenuTextList.get(menuSelection));
     }
 
     private void announceMenuSelection() {
@@ -446,6 +450,7 @@ public class MusicNavActivity extends MVActivityBase implements MediaPlayer.OnCo
     private void announceLevelChange() {
         switch (navLevel) {
             case MV_MUSIC_TOP_MENU:
+                txtSelection.setText(topMenuTextList.get(menuSelection));
                 announceMenuMode();
                 break;
             case MV_NAV_ALBUM:

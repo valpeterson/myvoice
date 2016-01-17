@@ -27,6 +27,7 @@ import android.util.Log;
 import com.example.android.common.activities.MVActivityBase;
 // import com.example.android.common.logger.Log; //vbpeters: Online sample used this, but changed to directly use android.util.Log to debug logging problems
 //import com.example.android.common.logger.LogWrapper;  //vbpeters: Online sample used this, but changed to directly use android.util.Log to debug logging problems
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -88,6 +89,15 @@ public class MainActivity extends MVActivityBase {
     public boolean onCreateOptionsMenu(Menu menu) {
         //vbpeters: uncomment this to get the option menu that allows toggling of immersive mode
         // getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    //override this to customize what TalkBack says when it's started.
+    @Override
+    public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
+        event.getText().add("My Voice, main menu");
+        event.getText().add(topMenuTextList.get(menuSelection));
+
         return true;
     }
 
