@@ -16,8 +16,10 @@
 
 package com.example.android.MyVoice;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.View;
@@ -53,6 +55,7 @@ public class MainActivity extends MVActivityBase {
     private List<topMenu> menuList;
     private int menuSelection;
     private TextView txtSelection;
+    private SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +63,18 @@ public class MainActivity extends MVActivityBase {
         Log.i(TAG, "onCreate: entering");
         setContentView(R.layout.activity_main);
         txtSelection = (TextView) findViewById(R.id.selection);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         menuList = Arrays.asList(topMenu.values());
-        menuSelection = 0;
-        announceMenuMode();
-        announceMenuSelection();
+        String defaultActivity = settings.getString("default_activity_list", "0");
+        menuSelection = Integer.valueOf(defaultActivity);
+
+        if (settings.getBoolean("topmenu_checkbox", false)) {
+            selectOption();
+        } else {
+            announceMenuMode();
+            announceMenuSelection();
+        }
 
         if (getSupportFragmentManager().findFragmentByTag(FRAGTAG) == null ) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -72,16 +82,6 @@ public class MainActivity extends MVActivityBase {
             transaction.add(fragment, FRAGTAG);
             transaction.commit();
         }
-      /*  btnMusic = (ImageButton) findViewById(R.id.btn_music);
-        btnMusic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                Intent i = new Intent(getApplicationContext(), MusicActivity.class);
-                startActivityForResult(i, 100);
-                // Changing button image to pause button
-                // btnPlay.setImageResource(R.drawable.btn_pause);
-            }
-        });*/
         Log.i(TAG, "onCreate: exiting");
     }
 
@@ -143,6 +143,25 @@ public class MainActivity extends MVActivityBase {
         }
     }
 
+    private void selectOption() {
+        Intent i;
+
+        switch (menuList.get(menuSelection)) {
+            case MV_MENU_MUSIC_NAV:
+                Log.i(TAG, "state change: music navigation");
+                i = new Intent(this, MusicNavActivity.class);
+                startActivity(i);
+                break;
+            case MV_MENU_SETTINGS:
+                Log.i(TAG, "state change: settings");
+                i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+            default:
+                Log.i(TAG, "state change: not implemented");
+        }
+    }
+
     public void onClickLeftButton(View view) {
         Log.i(TAG, "left button click");
         if (menuSelection > 0) {
@@ -164,21 +183,7 @@ public class MainActivity extends MVActivityBase {
     public void onClickCenterButton(View view)
     {
         Log.i(TAG, "center button click");
-        switch (menuList.get(menuSelection)) {
-            case MV_MENU_MUSIC_NAV:
-                Log.i(TAG, "state change: music navigation");
-                Intent i = new Intent(this, MusicNavActivity.class);
-                startActivity(i);
-                break;
-            default:
-                Log.i(TAG, "state change: not implemented");
-        }
-    }
-
-    public void play_music(View view) {
-        Log.i(TAG, "play_music");
-        Intent i = new Intent(this, MusicActivity.class);
-        startActivityForResult(i, 100);
+        selectOption();
     }
 
     public void createShortCut(){
