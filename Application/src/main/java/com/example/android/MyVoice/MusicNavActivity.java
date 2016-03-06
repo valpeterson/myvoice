@@ -665,8 +665,9 @@ public class MusicNavActivity extends MVActivityBase implements MediaPlayer.OnCo
         switch (navLevel) {
             case MV_MUSIC_TOP_MENU:
                 Log.i(TAG, "Return to main menu");
-                Intent i = new Intent(this, MainActivity.class);
-                startActivity(i);
+                //Intent i = new Intent(this, MainActivity.class);
+                //startActivity(i);
+                finish();
                 break;
             case MV_NAV_ALBUM:
             case MV_NAV_PLAYLISTS:

@@ -15,9 +15,14 @@
  limitations under the License.
 -->
 <resources>
+
     <string name="shortcutname">My Voice</string>
     <string name="sample_action">Toggle Immersive Mode!</string>
     <string name="title_activity_music_nav">My Voice - Music Navigation</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_speech">SpeechActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_phrase_list">Phrases</string>
+    <string name="title_phrase_detail">Phrase Detail</string>
 
 </resources>

@@ -49,9 +49,10 @@ public class MainActivity extends MVActivityBase {
         MV_MENU_MUSIC_NAV,
         MV_MENU_RESUME_MUSIC,
         MV_MENU_SPEECH_NAV,
-        MV_MENU_SETTINGS
+        MV_MENU_SETTINGS,
+        MV_MENU_SPEECH_SETUP
     }
-    private List<String> topMenuTextList = Arrays.asList("Music Navigation", "Resume Music", "Speech Navigation", "Settings");
+    private List<String> topMenuTextList = Arrays.asList("Music Navigation", "Resume Music", "Speech Navigation", "Settings", "Speech Setup");
     private List<topMenu> menuList;
     private int menuSelection;
     private TextView txtSelection;
@@ -155,6 +156,11 @@ public class MainActivity extends MVActivityBase {
             case MV_MENU_SETTINGS:
                 Log.i(TAG, "state change: settings");
                 i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+            case MV_MENU_SPEECH_SETUP:
+                Log.i(TAG, "state change: speech setup");
+                i = new Intent(this, PhraseListActivity.class);
                 startActivity(i);
                 break;
             default:

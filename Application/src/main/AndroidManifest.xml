@@ -20,6 +20,7 @@
     android:versionName="1.0" >
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
     <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
@@ -45,6 +46,22 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name=".SpeechActivity"
+            android:label="@string/title_activity_speech" >
+        </activity>
+        <activity
+            android:name=".PhraseListActivity"
+            android:label="@string/title_phrase_list" >
+        </activity>
+        <activity
+            android:name=".PhraseDetailActivity"
+            android:label="@string/title_phrase_detail"
+            android:parentActivityName=".PhraseListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.MyVoice.PhraseListActivity" />
         </activity>
     </application>
 
