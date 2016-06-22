@@ -120,6 +120,10 @@ public class PhraseListFragment extends ListFragment {
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
         mCallbacks.onItemSelected(String.valueOf(content.getItemId(position)));
+        if (content.isCategory()) {
+            content.selectChild(position);
+            setListAdapter(content);    //do this again to make reload the list with children
+        }
     }
 
     @Override

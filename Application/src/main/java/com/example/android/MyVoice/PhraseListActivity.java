@@ -84,7 +84,6 @@ public class PhraseListActivity extends Activity
             getFragmentManager().beginTransaction()
                     .replace(R.id.phrase_detail_container, fragment)
                     .commit();
-
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.

@@ -111,4 +111,9 @@ public class SpeechContent implements ListAdapter {
         //TODO: what shall we do?
     }
 
+    public void selectChild(int position) { filer.selectChild(position); }
+
+    public void selectParent() {filer.selectParent();}
+
+    public boolean isCategory() {return filer.isCategory();}
 }

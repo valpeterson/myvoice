@@ -22,6 +22,7 @@ public class SpeechFiler {
     private static TreeNode speechTree;
     private static int nextID;
     TreeNode currentNode;
+    TreeNode parentNode;
     private static Map<String, SpeechItem> ITEM_MAP =
             new HashMap<String, SpeechItem>();
 
@@ -49,7 +50,6 @@ public class SpeechFiler {
         String label;
         File[] dirChildren;
         TreeNode childNode;
-        TreeNode parentNode;
         boolean isCategory;
 
         dirChildren = currentDir.listFiles();
@@ -107,6 +107,19 @@ public class SpeechFiler {
         } else {
             return null;
         }
+    }
+
+    public void selectChild(int position) {
+        parentNode = currentNode;
+        currentNode = currentNode.getChild(position);
+    }
+
+    public void selectParent() {
+        currentNode = parentNode;
+    }
+
+    public boolean isCategory(){
+        return ((SpeechItem)currentNode.data).isCategory;
     }
 
     public TreeNode getTree() {

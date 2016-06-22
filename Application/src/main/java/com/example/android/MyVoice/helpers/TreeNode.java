@@ -18,7 +18,7 @@ public class TreeNode<SpeechItem> {
     }
 
     public TreeNode<SpeechItem> addChild(SpeechItem child) {
-        TreeNode<SpeechItem> childNode = new TreeNode<SpeechItem>(child);
+        TreeNode<SpeechItem> childNode = new TreeNode<>(child);
         childNode.parent = this;
         this.children.add(childNode);
         return childNode;
