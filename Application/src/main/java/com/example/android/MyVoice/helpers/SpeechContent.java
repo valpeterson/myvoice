@@ -2,6 +2,7 @@ package com.example.android.MyVoice.helpers;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 
 import com.example.android.MyVoice.R;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.IOException;
 
 /**
@@ -20,6 +23,7 @@ import java.io.IOException;
  */
 public class SpeechContent implements ListAdapter {
 
+    public static final String TAG = "MyVoice.SpeechContent";
     /**
      * An array of speech items.
      */
@@ -28,7 +32,7 @@ public class SpeechContent implements ListAdapter {
     private int resource;
     private LayoutInflater inflater;
 
-    public SpeechContent(Context ctx, int resourceID) throws IOException {
+    public SpeechContent(Context ctx, int resourceID) throws IOException, XmlPullParserException {
         context = ctx;
         inflater = LayoutInflater.from( ctx );
         resource = resourceID;
@@ -37,7 +41,13 @@ public class SpeechContent implements ListAdapter {
         } catch (IOException e) {
             throw e;
         }
-        filer.LoadDictionary();
+        // filer.LoadDictionary();
+        try {
+            filer.LoadCatalog();
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, "Error reading speech catalog file.");
+            e.printStackTrace();
+        }
 
     }
 

@@ -43,7 +43,7 @@ public class PhraseListActivity extends Activity
         setContentView(R.layout.activity_phrase_list);
         try {
             content = new SpeechContent(getApplicationContext(), R.layout.relative_phrase_list);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "ERROR: " + e.getMessage() + ".  Returning to top menu.",
                     Toast.LENGTH_LONG).show();
             finish();

@@ -3,14 +3,20 @@ package com.example.android.MyVoice.helpers;
 import android.os.Environment;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.lang.IllegalArgumentException;
 import java.util.HashMap;
 import java.util.Map;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 /**
  * Created by Val on 1/25/2016.
@@ -25,6 +31,15 @@ public class SpeechFiler {
     TreeNode parentNode;
     private static Map<String, SpeechItem> ITEM_MAP =
             new HashMap<String, SpeechItem>();
+
+    static final String CATALOG_FILENAME = "myvoice_speech_catalog_sample.xml";
+    // names of the XML tags
+    static final String XML_ROOT = "myvoice";
+    static final String XML_CATEGORY = "category";
+    static final String XML_PHRASE = "phrase";
+    static final String XML_NAME = "name";
+    static final String XML_FILE = "speechFile";
+    static final String XML_ORDER = "order";
 
     public SpeechFiler() throws IOException {
         nextID = 0;
@@ -43,7 +58,78 @@ public class SpeechFiler {
         currentNode = speechTree;
     }
 
-    private void LoadDirectory(File currentDir) {
+    void LoadCatalog() throws XmlPullParserException, IOException {
+        SpeechItem curItem;
+        String label;
+        String speechFile;
+        BufferedReader xmlReader;
+        String tempLine;
+        TreeNode childNode;
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        XmlPullParser xpp = factory.newPullParser();
+        String name;
+
+        Log.e(TAG, "Trying to read speech catalog: " + basePath + CATALOG_FILENAME);
+        File xmlFile = new File(basePath, CATALOG_FILENAME);
+        if (xmlFile.exists()) {
+            Log.e(TAG, "Found XML file");
+        } else {
+            Log.e(TAG, "Cannot find " + basePath + CATALOG_FILENAME);
+        }
+
+        xpp.setInput(new FileInputStream(xmlFile), null);
+        int eventType = xpp.getEventType();
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            name = null;
+            switch (eventType) {
+                case XmlPullParser.START_DOCUMENT:
+                    break;
+                case XmlPullParser.START_TAG:
+                    name = xpp.getName();
+                    Log.e(TAG, "Start tag " + name);
+                    if (name.equalsIgnoreCase(XML_PHRASE)) {
+                        label = xpp.getAttributeValue(null, XML_NAME);
+                        speechFile = xpp.getAttributeValue(null, XML_FILE);
+                        curItem = new SpeechItem(String.valueOf(nextID), label, speechFile, false);
+                        childNode = currentNode.addChild(curItem);
+                        ITEM_MAP.put(String.valueOf(nextID), curItem);
+                        nextID++;
+                    } else if (name.equalsIgnoreCase(XML_CATEGORY)) {
+                        label = xpp.getAttributeValue(null, XML_NAME);
+                        speechFile = xpp.getAttributeValue(null, XML_FILE);
+                        curItem = new SpeechItem(String.valueOf(nextID), label, speechFile, true);
+                        childNode = currentNode.addChild(curItem);
+                        ITEM_MAP.put(String.valueOf(nextID), curItem);
+                        nextID++;
+                        parentNode = currentNode;
+                        currentNode = childNode;    //we're going to now add children of this next-level directory
+                    } else {
+                        Log.e(TAG, "Encountered unexpected XML tag, " + name + ", in speech catalog");
+                    }
+                    break;
+                case XmlPullParser.END_TAG:
+                    name = xpp.getName();
+                    Log.e(TAG, "End tag " + name);
+                    if (name.equalsIgnoreCase(XML_CATEGORY)) {
+                        currentNode = parentNode;   //go back to adding children of the node we were on before
+                    }
+                    break;
+            }
+            try {
+                eventType = xpp.next();
+            } catch (XmlPullParserException e) {
+                Log.e(TAG, "XML Pull Parser Exception:");
+                Log.e(TAG, "  LINE: " + e.getLineNumber());
+                Log.e(TAG, "  COLUMN: " + e.getColumnNumber());
+                Log.e(TAG, "  DETAIL: " + e.getDetail());
+                throw e;
+            }
+        }
+    }
+
+/*
+    private void LoadDirectory(File currentDir) throws XmlPullParserException, IOException {
         File labelFile;
         BufferedReader myReader;
         SpeechItem curItem;
@@ -96,6 +182,7 @@ public class SpeechFiler {
         }
         LoadDirectory(currentFile);
     }
+*/
 
     public int getNumNodeChildren() {
         return currentNode.getNumChildren();

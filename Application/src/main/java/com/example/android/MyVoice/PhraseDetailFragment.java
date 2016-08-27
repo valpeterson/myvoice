@@ -57,6 +57,9 @@ public class PhraseDetailFragment extends Fragment {
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.phrase_detail)).setText(mItem.toString());
+            if (!mItem.isCategory) {
+                ((TextView) rootView.findViewById(R.id.phrase_file)).setText(mItem.audioFilePath);
+            }
         }
 
         return rootView;
