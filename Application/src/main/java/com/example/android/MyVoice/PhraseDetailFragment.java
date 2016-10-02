@@ -24,9 +24,12 @@ public class PhraseDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
-    private SpeechContent content;
+    private SpeechContent mContent;
+    private TextView mNameText;
+    private TextView mFileText;
+
     /**
-     * The dummy content this fragment is presenting.
+     * The dummy mContent this fragment is presenting.
      */
     private SpeechItem mItem;
 
@@ -40,12 +43,18 @@ public class PhraseDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        content = AppData.getInstance().getContent();
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = content.getItemFromID(getArguments().getString(ARG_ITEM_ID));
+        mContent = AppData.getInstance().getContent();
+//        if (getArguments().containsKey(ARG_ITEM_ID)) {
+            //find out from fragment arguments what item was selected in the parent activity
+//            mItem = mContent.getItemFromID(getArguments().getString(ARG_ITEM_ID));
+//        }
+    }
+
+    public void updateData(String itemID) {
+        mItem = mContent.getItemFromID(itemID);
+        mNameText.setText(mItem.toString());
+        if (!mItem.isCategory) {
+            mFileText.setText(mItem.audioFilePath);
         }
     }
 
@@ -53,12 +62,13 @@ public class PhraseDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_phrase_detail, container, false);
-
-        // Show the dummy content as text in a TextView.
+        mNameText = (TextView) rootView.findViewById(R.id.phrase_detail);
+        mFileText = (TextView) rootView.findViewById(R.id.phrase_file);
+        // Show the details of the selected item
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.phrase_detail)).setText(mItem.toString());
+            mNameText.setText(mItem.toString());
             if (!mItem.isCategory) {
-                ((TextView) rootView.findViewById(R.id.phrase_file)).setText(mItem.audioFilePath);
+                mFileText.setText(mItem.audioFilePath);
             }
         }
 

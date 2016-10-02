@@ -7,8 +7,7 @@ import android.widget.Toast;
 
 import com.example.android.MyVoice.helpers.AppData;
 import com.example.android.MyVoice.helpers.SpeechContent;
-
-import java.io.IOException;
+import com.example.android.MyVoice.helpers.SpeechItem;
 
 
 /**
@@ -35,20 +34,21 @@ public class PhraseListActivity extends Activity
      * device.
      */
     private boolean mTwoPane;
-    private SpeechContent content;
+    private SpeechContent mContent;
+    private PhraseDetailFragment mDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phrase_list);
         try {
-            content = new SpeechContent(getApplicationContext(), R.layout.relative_phrase_list);
+            mContent = new SpeechContent(getApplicationContext(), R.layout.relative_phrase_list);
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), "ERROR: " + e.getMessage() + ".  Returning to top menu.",
                     Toast.LENGTH_LONG).show();
             finish();
         }
-        AppData.getInstance().setContent(content);  //Store SpeechContent for the fragments and other activities to use
+        AppData.getInstance().setContent(mContent);  //Store SpeechContent for the fragments and other activities to use
+        setContentView(R.layout.activity_phrase_list);
 
         if (findViewById(R.id.phrase_detail_container) != null) {
             // The detail container view will be present only in the
@@ -73,23 +73,49 @@ public class PhraseListActivity extends Activity
      */
     @Override
     public void onItemSelected(String id) {
+        SpeechItem mItem;
+
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(PhraseDetailFragment.ARG_ITEM_ID, id);
-            PhraseDetailFragment fragment = new PhraseDetailFragment();
-            fragment.setArguments(arguments);
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.phrase_detail_container, fragment)
-                    .commit();
+            mItem = mContent.getItemFromID(id);
+            if (mDetailFragment == null) {
+//                Bundle arguments = new Bundle();
+//                arguments.putString(PhraseDetailFragment.ARG_ITEM_ID, id);
+                mDetailFragment = new PhraseDetailFragment();
+//                mDetailFragment.setArguments(arguments);
+                // If we're drilling down into a category then add to the back stack so user can use back button to navigate back up to category
+                if (mItem.isCategory) {
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.phrase_detail_container, mDetailFragment)
+                            .addToBackStack("category") //PhraseListFragment will use this to know if it needs to go back to parent when back button is pressed
+                            .commit();
+                } else {
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.phrase_detail_container, mDetailFragment)
+                            .commit();
+                }
+            } else {
+                mDetailFragment.updateData(id);
+            }
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, PhraseDetailActivity.class);
-            detailIntent.putExtra(PhraseDetailFragment.ARG_ITEM_ID, id);
+                                    detailIntent.putExtra(PhraseDetailFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
     }
+
+    /**
+     * Callback method from {@link PhraseListFragment.Callbacks}
+     * indicating that a fragment was popped off the back stack because user wants to go
+     * back up to parent category.
+     */
+    @Override
+    public void onBackStack() {
+        mDetailFragment = null;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.android.MyVoice;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.app.ListFragment;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.example.android.MyVoice.helpers.SpeechItem;
  * interface.
  */
 public class PhraseListFragment extends ListFragment {
+    static int lastStackCount = 0;  //used to determine whether we're pushing or popping back stack
+            //entries, so we can provide navigation back up to the parent categories.
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -50,6 +53,7 @@ public class PhraseListFragment extends ListFragment {
          * Callback for when an item has been selected.
          */
         public void onItemSelected(String id);
+        public void onBackStack();
     }
 
     /**
@@ -59,6 +63,8 @@ public class PhraseListFragment extends ListFragment {
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
         public void onItemSelected(String id) {
+        }
+        public void onBackStack() {
         }
     };
 
@@ -74,12 +80,22 @@ public class PhraseListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         content = AppData.getInstance().getContent();
         setListAdapter(content);
-/*        setListAdapter(new ArrayAdapter<SpeechItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                SpeechContent.ITEMS));
-*/
+
+        getFragmentManager().addOnBackStackChangedListener(
+                new FragmentManager.OnBackStackChangedListener() {
+                    public void onBackStackChanged() {
+                        FragmentManager mgr = getFragmentManager();
+                        content = AppData.getInstance().getContent();
+                        int cnt = mgr.getBackStackEntryCount();
+                        if (cnt < lastStackCount) { //we must have popped a stack entry so we're going up to the parent
+                            content.selectParent();
+                            setListAdapter(content);    //make it reload the list with children of the parent
+                            mCallbacks.onBackStack();   //tell PhraseListActivity so it will forget the old detail fragment and create new one next time we navigate down
+                        }
+                        lastStackCount = cnt;
+                    }
+                });
+
     }
 
     @Override
@@ -123,7 +139,8 @@ public class PhraseListFragment extends ListFragment {
         SpeechItem curItem = (SpeechItem)content.getItem(position);
         if (curItem.isCategory) {
             content.selectChild(position);
-            setListAdapter(content);    //do this again to make reload the list with children
+//            content.notifyDataSetChanged();
+            setListAdapter(content);    //do this again to make reload the list with children of the category
         }
     }
 

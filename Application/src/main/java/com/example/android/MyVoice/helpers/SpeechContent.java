@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
@@ -21,7 +22,8 @@ import java.io.IOException;
  * Helper class for managing the speech content for PhraseListActivity and PhraseDetailActivity.
  * <p/>
  */
-public class SpeechContent implements ListAdapter {
+public class SpeechContent extends BaseAdapter {
+//public class SpeechContent implements ListAdapter {
 
     public static final String TAG = "MyVoice.SpeechContent";
     /**
