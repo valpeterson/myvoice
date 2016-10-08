@@ -7,8 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.database.Cursor;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
@@ -62,6 +65,8 @@ public class MusicNavActivity extends MVActivityBase implements MediaPlayer.OnCo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
         navLevel = levels.MV_MUSIC_TOP_MENU;
         menuList = Arrays.asList(topMenu.values());
         menuSelection = 0;
@@ -96,7 +101,30 @@ public class MusicNavActivity extends MVActivityBase implements MediaPlayer.OnCo
         mp = new MediaPlayer();
         mp.setOnCompletionListener(this);
     }
-/*
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_music_nav, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_settings:
+                android.util.Log.i(TAG, "state change: settings");
+                i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+            default:
+                android.util.Log.i(TAG, "Unsupported menu item selected");
+        }
+        return true;
+    }
+
+    /*
     @Override
     protected void onResume() {
         super.onResume();

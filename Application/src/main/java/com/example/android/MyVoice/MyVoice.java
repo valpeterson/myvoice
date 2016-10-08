@@ -15,24 +15,21 @@
 */
 package com.example.android.MyVoice;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.example.android.common.logger.Log;
+import android.util.Log;
 
 public class MyVoice extends Fragment {
 
-    public static final String TAG = "SuperTabImmersive";
+    public static final String TAG = "MyVoice";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //
-        //
-        //vbpeters: uncomment this to enable functionality of the option menu that allows toggling of immersive mode
-        // setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -51,8 +48,21 @@ public class MyVoice extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.sample_action) {
-            toggleHideyBar();
+        Intent i;
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.sample_action:
+                toggleHideyBar();
+                break;
+            case R.id.action_settings:
+                android.util.Log.i(TAG, "state change: settings");
+                i = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(i);
+                break;
+            case R.id.action_speech_setup:
+                android.util.Log.i(TAG, "state change: speech setup");
+                i = new Intent(getActivity(), PhraseListActivity.class);
+                startActivity(i);
         }
         return true;
     }

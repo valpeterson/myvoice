@@ -20,6 +20,7 @@
     <string name="sample_action">Toggle Immersive Mode!</string>
     <string name="title_activity_music_nav">My Voice - Music Navigation</string>
     <string name="action_settings">Settings</string>
+    <string name="action_speech_setup">Speech Setup</string>
     <string name="title_activity_speech">SpeechActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_phrase_list">Phrases</string>

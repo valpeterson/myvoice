@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.content.Intent;
@@ -48,11 +49,12 @@ public class MainActivity extends MVActivityBase {
     private enum topMenu {
         MV_MENU_MUSIC_NAV,
         MV_MENU_RESUME_MUSIC,
-        MV_MENU_SPEECH_NAV,
-        MV_MENU_SETTINGS,
-        MV_MENU_SPEECH_SETUP
+        MV_MENU_SPEECH_NAV
+        //removed these last two since we now put them in the app bar options menu
+//        MV_MENU_SETTINGS,
+//        MV_MENU_SPEECH_SETUP
     }
-    private List<String> topMenuTextList = Arrays.asList("Music Navigation", "Resume Music", "Speech Navigation", "Settings", "Speech Setup");
+    private List<String> topMenuTextList = Arrays.asList("Music Navigation", "Resume Music", "Speech Navigation"); //, "Settings", "Speech Setup");
     private List<topMenu> menuList;
     private int menuSelection;
     private TextView txtSelection;
@@ -65,7 +67,8 @@ public class MainActivity extends MVActivityBase {
         setContentView(R.layout.activity_main);
         txtSelection = (TextView) findViewById(R.id.selection);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
-
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
         menuList = Arrays.asList(topMenu.values());
         String defaultActivity = settings.getString("default_activity_list", "0");
         menuSelection = Integer.valueOf(defaultActivity);
@@ -88,8 +91,7 @@ public class MainActivity extends MVActivityBase {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //vbpeters: uncomment this to get the option menu that allows toggling of immersive mode
-        // getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -153,7 +155,7 @@ public class MainActivity extends MVActivityBase {
                 i = new Intent(this, MusicNavActivity.class);
                 startActivity(i);
                 break;
-            case MV_MENU_SETTINGS:
+/*            case MV_MENU_SETTINGS:
                 Log.i(TAG, "state change: settings");
                 i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
@@ -163,6 +165,7 @@ public class MainActivity extends MVActivityBase {
                 i = new Intent(this, PhraseListActivity.class);
                 startActivity(i);
                 break;
+*/
             default:
                 Log.i(TAG, "state change: not implemented");
         }

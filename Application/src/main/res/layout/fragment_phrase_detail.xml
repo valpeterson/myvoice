@@ -1,20 +1,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:id="@+id/frame1">
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Phrase"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/phrase_detail"
+            android:id="@+id/phrase_header" />
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/phrase_detail"
-            style="?android:attr/textAppearanceLarge" android:layout_width="match_parent"
+            style="?android:attr/textAppearanceMedium" android:layout_width="100dp"
             android:layout_height="60dp" android:padding="16dp" android:textIsSelectable="true"
             tools:context="com.example.android.MyVoice.PhraseDetailFragment"
-        />
+            android:layout_alignParentRight="true"
+            android:layout_toStartOf="@+id/phrase_file" />
+    </LinearLayout>
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/phrase_file"
-            style="?android:attr/textAppearanceLarge" android:layout_width="match_parent"
+            style="?android:attr/textAppearanceMedium" android:layout_width="458dp"
             android:layout_height="60dp" android:padding="16dp" android:textIsSelectable="true"
-            tools:context="com.example.android.MyVoice.PhraseDetailFragment"
-        />
-    </LinearLayout>
+            tools:context="com.example.android.MyVoice.PhraseDetailFragment" />
+
 </RelativeLayout>
